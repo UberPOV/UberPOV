@@ -2097,6 +2097,22 @@ void Parser::Parse_Pattern (PATTERN_T *New, BlendMapTypeId TPat_Type)
             if (New->Type != DENSITY_FILE_PATTERN)
                 Not_With ("interpolate","non-density_file");
             dynamic_cast<DensityFilePattern*>(New->pattern.get())->densityFile->Interpolation = (int)Parse_Float();
+            switch (dynamic_cast<DensityFilePattern*>(New->pattern.get())->densityFile->Interpolation)
+            {
+                case kDensityFileInterpolation_None:
+                case kDensityFileInterpolation_Trilinear:
+                case kDensityFileInterpolation_Tricubic:
+                case kDensityFileInterpolation_BlobFour:
+                case kDensityFileInterpolation_BlobSix:
+                case kDensityFileInterpolation_BlobEight:
+                case kDensityFileInterpolation_Trilinear_Shftd:
+                case kDensityFileInterpolation_Tricubic_Shftd:
+                    break;
+                default:
+                    dynamic_cast<DensityFilePattern*>(New->pattern.get())->densityFile->Interpolation = kDensityFileInterpolation_Tricubic;
+                    Warning("Invalid density_file interpolate value. Mapped to tri-cublic.");
+                    break;
+            }
         END_CASE
 
         CASE (NUMBER_OF_SIDES_TOKEN)
@@ -5660,6 +5676,22 @@ void Parser::Parse_PatternFunction(TPATTERN *New)
             if (New->Type != DENSITY_FILE_PATTERN)
                 Not_With ("interpolate","non-density_file");
             dynamic_cast<DensityFilePattern*>(New->pattern.get())->densityFile->Interpolation = (int)Parse_Float();
+            switch (dynamic_cast<DensityFilePattern*>(New->pattern.get())->densityFile->Interpolation)
+            {
+                case kDensityFileInterpolation_None:
+                case kDensityFileInterpolation_Trilinear:
+                case kDensityFileInterpolation_Tricubic:
+                case kDensityFileInterpolation_BlobFour:
+                case kDensityFileInterpolation_BlobSix:
+                case kDensityFileInterpolation_BlobEight:
+                case kDensityFileInterpolation_Trilinear_Shftd:
+                case kDensityFileInterpolation_Tricubic_Shftd:
+                    break;
+                default:
+                    dynamic_cast<DensityFilePattern*>(New->pattern.get())->densityFile->Interpolation = kDensityFileInterpolation_Tricubic;
+                    Warning("Invalid density_file interpolate value. Mapped to tri-cublic.");
+                    break;
+            }
         END_CASE
 
         // TODO VERIFY - NUMBER_OF_SIDES is not accepted, is that ok?
