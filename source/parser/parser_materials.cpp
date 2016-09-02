@@ -2395,6 +2395,10 @@ void Parser::Parse_Finish (FINISH **Finish_Ptr)
             New->LommelSeeligerWeight = Parse_Float ();
         END_CASE
 
+        CASE (MINNAERT_TOKEN)
+            New->MinnaertExponent = Parse_Float ();
+        END_CASE
+
         CASE (OREN_NAYAR_TOKEN)
             New->SetOrenNayarSigma(Parse_Float ());
             mExperimentalFlags.orenNayar = true;
@@ -2657,6 +2661,24 @@ void Parser::Parse_Finish (FINISH **Finish_Ptr)
                           " Expect future versions of POV-Ray to render this scene differently without warning.");
     }
 
+    int numNonlambertianDiffuseModels = 0;
+    if (New->Brilliance != 1.0)
+        ++numNonlambertianDiffuseModels;
+    if ((New->OrenNayarA != 1.0) || (New->OrenNayarB != 0.0))
+        ++numNonlambertianDiffuseModels;
+    if (New->MinnaertExponent != 1.0)
+        ++numNonlambertianDiffuseModels;
+    if (New->LommelSeeligerWeight != 0.0)
+        ++numNonlambertianDiffuseModels;
+
+    if (numNonlambertianDiffuseModels > 1)
+    {
+        PossibleError("Multiple non-default diffuse lighting models (brilliance, Oren-Nayar, Minnaert and/or"
+                      " Lommel-Seeliger) used in a single finish block. This is highly discouraged, as the mutual"
+                      " interaction of these features is officially unspecified and may be subject to change without"
+                      " notice at any time. To mix these models, use averaged or layered textures instead.");
+    }
+
     if ((sceneData->EffectiveLanguageVersion() >= 370) && ambientSet)
     {
         // As of version 3.7, use of "ambient" to model glowing materials is deprecated, and "emission" should be used
@@ -2683,6 +2705,8 @@ void Parser::Parse_Finish (FINISH **Finish_Ptr)
     // so that a user-specified value of 1.0 corresponds to a
     // backscattering of 100% of the incoming light
     double EffectiveBihemisphericalReflectance = 2.0 / (New->Brilliance + 1.0);
+    if (New->MinnaertExponent != 1.0)
+        EffectiveBihemisphericalReflectance *= Sqr(2.0 / (New->MinnaertExponent + 1.0));
     if (New->OrenNayarA != 1.0)
         EffectiveBihemisphericalReflectance *= New->OrenNayarA;
     if (New->OrenNayarB != 0.0)

@@ -240,6 +240,21 @@ Advanced Diffuse Models:
     patch() function with the patch name "upov-lommel_seeliger"; the current
     implementation is version 0.9.
 
+  - UberPOV supports the so-called Minnaert model for diffuse reflections,
+    which is a generalization of the standard Lambertian model. To enable this
+    model, specify the following parameter in the finish block:
+
+        minnaert NUMBER
+
+    The parameter specifies the exponential parameter in the Minnaert equation
+    (typically named k or m; note that the effective exponent in the equation
+    is k-1). The default value of 1.0 is equivalent to the standard Lambertian
+    model.
+
+    This syntax extension can be tested for using the #patch directive or
+    patch() function with the patch name "upov-minnaert"; the current
+    implementation is version 0.9.
+
   - UberPOV supports the so-called Oren-Nayar "qualitative model" for diffuse
     reflections, which is a generalization of the standard Lambertian model. To
     enable this model, specify the following parameter in the finish block:

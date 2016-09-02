@@ -136,6 +136,23 @@ struct Finish_Struct
     /// is frequently used.
     SNGL LommelSeeligerWeight;
 
+    /// @name Minnaert diffuse model parameters.
+    ///
+    /// By default, POV-Ray uses a Lambertian-based diffuse reflectivity model. While this model is useful for
+    /// solid material surfaces, some surfaces like textiles are better simulated using other models, one being the
+    /// Minnaert model.
+    ///
+    /// @{
+
+    /// Exponent of the Minnaert diffuse model.
+    ///
+    /// This is the value often denoted as @f$ m @f$ or @f$ k @f$ in the Minnaert BRDF formula. Note that the
+    /// effective exponent in such formulae is @f$ m-1 @$f.
+    ///
+    SNGL MinnaertExponent;
+
+    /// @}
+
     /// @name Oren-Nayar diffuse model parameters.
     ///
     /// By default, POV-Ray uses a Lambertian-based diffuse reflectivity model. While this model is useful for

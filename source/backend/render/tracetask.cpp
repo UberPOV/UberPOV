@@ -762,7 +762,7 @@ void TraceTask::StochasticSupersamplingM3()
                         PreciseRGBTColour col, colSqr;
 
                         Vector2d jitter = Uniform2dOnSquare(GetViewDataPtr()->stochasticRandomGenerator) - 0.5;
-                        trace(x + jitter.x(), y + jitter.y(), GetViewData()->GetWidth(), GetViewData()->GetHeight(), colTemp, max(samples, minSamples));
+                        trace(x+0.5 + jitter.x(), y+0.5 + jitter.y(), GetViewData()->GetWidth(), GetViewData()->GetHeight(), colTemp, max(samples, minSamples));
 
                         col = PreciseRGBTColour(GammaCurve::Encode(aaGamma, colTemp));
                         colSqr = Sqr(col);

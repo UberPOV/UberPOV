@@ -598,7 +598,8 @@ double RadiosityFunction::GatherLight(const Vector3d& ipoint, const Vector3d& ra
         ticket.radiosityQuality = 1.0;
         Ray nray(ticket, ipoint, direction, Ray::OtherRay, false, false, true); // Build a ray pointing in the chosen direction
         ticket.radiosityRecursionDepth++;
-        ticket.subFrameTime = 0.5; // TODO - should be random
+        if (settings.cache)
+            ticket.subFrameTime = 0.5; // TODO - should probably be random
         ticket.radiosityImportanceQueried = (float)i / (float)(cur_sample_count-1);
         bool alphaBackground = ticket.alphaBackground;
         ticket.alphaBackground = false;

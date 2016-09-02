@@ -2482,14 +2482,17 @@ void Trace::ComputeDiffuseColour(LightColour& colour, const LightColour& lightCo
 
     cos_in = fabs(dot(normal, toLight));
 
+    if (finish->Fresnel || (finish->LommelSeeligerWeight != 0.0) || (finish->MinnaertExponent != 1.0) || (finish->OrenNayarB != 0.0))
+        cos_out = fabs(dot(normal, fromEye));
+
     // Brilliance is likely to be 1.0 (default value)
     if(finish->Brilliance != 1.0)
         intensity = pow(cos_in, (double) finish->Brilliance);
     else
         intensity = cos_in;
 
-    if (finish->Fresnel || (finish->LommelSeeligerWeight != 0.0) || (finish->OrenNayarB != 0.0))
-        cos_out = fabs(dot(normal, fromEye));
+    if (finish->MinnaertExponent != 1.0)
+        intensity *= pow(cos_in * cos_out, finish->MinnaertExponent - 1.0);
 
     if (finish->OrenNayarA != 1.0)
         intensity *= finish->OrenNayarA;

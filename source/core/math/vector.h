@@ -575,7 +575,7 @@ class GenericVector3d
         }
 
         /// Returns an arbitrary unit-length vector perpendicular to this one.
-        GenericVector3d orthogonal()
+        GenericVector3d orthogonal() const
         {
             if ((abs(vect[X]) <= abs(vect[Y])) && (abs(vect[X]) <= abs(vect[Z])))
                 // x component is (one of) the smallest; compute cross product with X axis (which boils down to the following formula)

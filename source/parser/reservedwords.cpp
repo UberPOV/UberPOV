@@ -368,6 +368,7 @@ const RESERVED_WORD Reserved_Words[LAST_TOKEN] = {
     {METRIC_TOKEN, "metric" },
     {MAXIMUM_REUSE_TOKEN, "maximum_reuse" },
     {MINIMUM_REUSE_TOKEN, "minimum_reuse" },
+    {MINNAERT_TOKEN, "minnaert"},
     {MIN_EXTENT_TOKEN, "min_extent" },
     {MIN_TOKEN, "min"},
     {MM_PER_UNIT_TOKEN, "mm_per_unit"},

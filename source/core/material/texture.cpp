@@ -1170,6 +1170,7 @@ FINISH *Create_Finish()
     New->DiffuseAlbedoAdjust        = 1.0;
     New->DiffuseAlbedoAdjustRad     = 1.0;
     New->LommelSeeligerWeight       = 0.0;
+    New->MinnaertExponent           = 1.0;
     New->OrenNayarA                 = 1.0;
     New->OrenNayarB                 = 0.0;
     New->Phong                      = 0.0;
