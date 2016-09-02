@@ -72,6 +72,7 @@ static const Patch_Data patch_data[] = {
     { "upov-radiosity-no_cache",        0.10 }, // UberPOV-style bypass of radiosity caching mechanism to implement stochastic diffuse
     { "upov-read-text",                 1.00 }, // UberPOV-style plaintext reading
     { "upov-reflection-roughness",      0.90 }, // UberPOV-style blurred reflections
+    { "wfpokorny-density_file-refine",  1.10 }, // density_file centering and new exponential blobbing interpolations.
 
     /*
     { "upov-backscatter",               0.10 }, // UberPOV-style support for backscattering (cat's eye effect)
