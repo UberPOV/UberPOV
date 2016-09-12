@@ -62,7 +62,7 @@ Testing for UberPOV:
 
   - UberPOV currently recognizes the following extension names:
 
-      - upov (137.00)
+      - upov (137.09)
 
         This pseudo-extension indicates the version of UberPOV.
 
@@ -76,10 +76,25 @@ Testing for UberPOV:
         The "file_time" keyword can be used as a function to determine the
         last modification time of a file.
 
+      - upov-lommel_seeliger (0.90):
+
+        The "lommel_seeliger" keyword can be used inside finish statements to
+        enable the Lommel-Seeliger diffuse shading model.
+
+      - upov-minnaert (0.90):
+
+        The "minnaert" keyword can be used inside finish statements to enable
+        the Minnaert diffuse shading model.
+
+      - upov-oren_nayar (0.10):
+
+        The "oren_nayar" keyword can be used inside finish statements to enable
+        the Oren-Nayar diffuse shading model.
+
       - upov-light_source-max_distance (0.80):
 
-        The max_distance keyword can be used inside light_source statements to
-        affect the light source distanc-based cutoff feature.
+        The "max_distance" keyword can be used inside light_source statements
+        to affect the light source distanc-based cutoff feature.
 
       - upov-persistent (0.10):
 

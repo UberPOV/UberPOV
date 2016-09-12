@@ -58,7 +58,7 @@ typedef struct {
 
 // List of patches supported by this branch
 static const Patch_Data patch_data[] = {
-    { "upov",                         137.00 }, // UberPOV version number
+    { "upov",                         137.09 }, // UberPOV version number
 
     { "upov-blink",                     0.90 }, // UberPOV-style blink keyword
     { "upov-file_time",                 0.90 }, // UberPOV-style file_time function
