@@ -16,7 +16,7 @@
 /// ----------------------------------------------------------------------------
 ///
 /// Persistence of Vision Ray Tracer ('POV-Ray') version 3.7.
-/// Copyright 1991-2015 Persistence of Vision Raytracer Pty. Ltd.
+/// Copyright 1991-2016 Persistence of Vision Raytracer Pty. Ltd.
 ///
 /// POV-Ray is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU Affero General Public License as
@@ -66,10 +66,6 @@ class BackendSceneData : public SceneData
         POVMSAddress backendAddress;
         /// frontend address
         POVMSAddress frontendAddress;
-
-        /// What gamma mode to use.
-        /// One of kPOVList_GammaMode_*.
-        int gammaMode;
 
         /**
          *  Find a file for reading.

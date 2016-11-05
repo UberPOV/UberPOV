@@ -47,13 +47,12 @@
 ///
 //******************************************************************************
 
+// Unit header file must be the first file included within POV-Ray *.cpp files (pulls in config)
+#include "parser/parser.h"
+
 #include <cctype>
 
 #include <limits>
-
-// configparser.h must always be the first POV file included in the parser (pulls in platform config)
-#include "parser/configparser.h"
-#include "parser/parser.h"
 
 #include "base/version.h"
 #include "base/stringutilities.h"
@@ -62,11 +61,7 @@
 #include "core/material/pattern.h"
 #include "core/material/texture.h"
 #include "core/math/matrix.h"
-
-#include "povms/povmsid.h"
-#include "povms/povmsutil.h"
-
-#include "backend/scene/backendscenedata.h"
+#include "core/scene/scenedata.h"
 
 #include "parser/patch.h"
 
@@ -110,7 +105,7 @@ void Parser::Initialize_Tokenizer()
 
     pre_init_tokenizer ();
 
-    rfile = Locate_File(sceneData, sceneData->inputFile.c_str(),POV_File_Text_POV,actualFileName,true);
+    rfile = Locate_File(sceneData->inputFile.c_str(),POV_File_Text_POV,actualFileName,true);
     if(rfile != NULL)
     {
         Input_File->In_File = new IBufferedTextStream(sceneData->inputFile.c_str(), rfile);
@@ -199,6 +194,8 @@ void Parser::pre_init_tokenizer ()
     Input_File = &Include_Files[0];
     Include_Files[0].In_File = NULL;
 
+    // TODO - on modern machines it may be faster to do the comparisons for each token
+    //        than to access the conversion table.
     for(i = 0; i < LAST_TOKEN; i++)
     {
         Conversion_Util_Table[i] = i;
@@ -703,10 +700,7 @@ void Parser::Get_Token ()
 
         if((ElapsedRealTime() - last_progress) > 1000) // update progress at most every second
         {
-            POVMS_Object obj(kPOVObjectClass_ParserProgress);
-            obj.SetLong(kPOVAttrib_RealTime, ElapsedRealTime());
-            obj.SetLong(kPOVAttrib_CurrentTokenCount, Current_Token_Count);
-            RenderBackend::SendSceneOutput(sceneData->sceneId, sceneData->frontendAddress, kPOVMsgIdent_Progress, obj);
+            SignalProgress(ElapsedRealTime(), Current_Token_Count);
 
             Cooperate();
 
@@ -1502,7 +1496,7 @@ const char *Parser::Get_Token_String (TOKEN Token_Id)
 {
     register int i;
 
-    for (i = 0; i < LAST_TOKEN; i++)
+    for (i = 0; Reserved_Words[i].Token_Name != NULL; i++)
         if (Reserved_Words[i].Token_Number == Token_Id)
             return (Reserved_Words[i].Token_Name);
     return ("");
@@ -1539,7 +1533,9 @@ char *Parser::Get_Reserved_Words (const char *additional_words)
     int length = 0;
     int i;
 
-    for (i = 0; i < LAST_TOKEN; i++)
+    // Compute the length required for the buffer.
+
+    for (i = 0; Reserved_Words[i].Token_Name != NULL; i++)
     {
         if (!isalpha (Reserved_Words [i].Token_Name [0]))
             continue;
@@ -1547,14 +1543,20 @@ char *Parser::Get_Reserved_Words (const char *additional_words)
             continue;
         length += (int)strlen (Reserved_Words[i].Token_Name) + 1;
     }
-
     length += (int)strlen (additional_words);
 
+    // Create the buffer.
+
     char *result = reinterpret_cast<char *>(POV_MALLOC (++length, "Keyword List"));
+
+    // Copy the caller-supplied additional words into the buffer.
+
     strcpy (result, additional_words);
     char *s = result + strlen (additional_words);
 
-    for (i = 0; i < LAST_TOKEN; i++)
+    // Copy our own keywords into the buffer.
+
+    for (i = 0; Reserved_Words[i].Token_Name != NULL; i++)
     {
         if (!isalpha (Reserved_Words [i].Token_Name [0]))
             continue;
@@ -2301,17 +2303,19 @@ void Parser::Parse_Directive(int After_Hash)
 
                             sceneData->languageVersion = (int)(Parse_Float() * 100 + 0.5);
 
-                            if ((sceneData->languageVersionLate) && sceneData->languageVersion >= 370)
+                            if ((sceneData->languageVersionLate) && sceneData->languageVersion >= 371)
                             {
                                 // As of POV-Ray 3.7, all scene files are supposed to begin with a `#version` directive.
-                                // We no longer tolerate violation of that rule if the main scene file claims to be
-                                // compatible with POV-Ray 3.7 anywhere further down the road.
-                                // (We need to be more lax with include files though, as it may just as well be a
-                                // standard include file that happens to have been updated since the scene was
+                                // As of POV-Ray 3.71, We no longer tolerate violation of that rule if the main scene
+                                // file claims to be compatible with POV-Ray 3.71 anywhere further down the road.
+                                // (We need to be more lax with include files though, as they may just as well be
+                                // standard include files that happens to have been updated since the scene was
                                 // originally designed.)
+
                                 if (Include_File_Index == 0)
                                     Error("As of POV-Ray 3.7, the '#version' directive must be the first non-comment "
-                                          "statement in the scene file.");
+                                          "statement in the scene file. If your scene will adapt to whatever version "
+                                          "is un use dynamically, start your scene with '#version version'.");
                             }
 
                             // NB: This must be set _after_ parsing the value, in order for the `#version version`
@@ -2687,7 +2691,7 @@ void Parser::Open_Include()
     // to free In_File if it's not NULL.
     Input_File->In_File = NULL;
 
-    IStream *is = Locate_File(sceneData, formalFileName, POV_File_Text_INC, actualFileName, true);
+    IStream *is = Locate_File(formalFileName, POV_File_Text_INC, actualFileName, true);
     if(is == NULL)
     {
         Input_File->In_File = NULL;  /* Keeps from closing failed file. */
@@ -2885,7 +2889,7 @@ void Parser::Init_Sym_Tables()
     Add_Sym_Table();
     assert(Table_Index == SYM_TABLE_RESERVED);
 
-    for (i = 0; i < LAST_TOKEN; i++)
+    for (i = 0; Reserved_Words[i].Token_Name != NULL; i++)
     {
         Add_Symbol(SYM_TABLE_RESERVED,Reserved_Words[i].Token_Name,Reserved_Words[i].Token_Number);
     }
@@ -3075,7 +3079,7 @@ SYM_ENTRY *Parser::Add_Symbol (int Index,const char *Name,TOKEN Number)
 }
 
 
-SYM_ENTRY *Parser::Find_Symbol(int Index,const char *Name)
+SYM_ENTRY *Parser::Find_Symbol (int Index, const char *Name)
 {
     SYM_ENTRY *Entry;
 
@@ -3094,6 +3098,19 @@ SYM_ENTRY *Parser::Find_Symbol(int Index,const char *Name)
     }
 
     return(Entry);
+}
+
+
+SYM_ENTRY *Parser::Find_Symbol (const char *name)
+{
+    SYM_ENTRY *entry;
+    for (int index = Table_Index; index > 0; --index)
+    {
+        entry = Find_Symbol (index, name);
+        if (entry)
+            return entry;
+    }
+    return NULL;
 }
 
 
@@ -3380,7 +3397,7 @@ void Parser::Invoke_Macro()
         }
         else
         {
-            is = Locate_File (sceneData, PMac->Macro_Filename, POV_File_Text_Macro, ign, true);
+            is = Locate_File (PMac->Macro_Filename, POV_File_Text_Macro, ign, true);
             if(is == NULL)
             {
                 Input_File->In_File = NULL;  /* Keeps from closing failed file. */
@@ -3627,7 +3644,7 @@ void Parser::Parse_Fopen(void)
     EXPECT
         CASE(READ_TOKEN)
             New->R_Flag = true;
-            rfile = Locate_File(sceneData, fileName.c_str(), POV_File_Text_User, ign, true);
+            rfile = Locate_File(fileName.c_str(), POV_File_Text_User, ign, true);
             if(rfile != NULL)
                 New->In_File = new IBufferedTextStream(fileName.c_str(), rfile);
             else
@@ -3640,7 +3657,7 @@ void Parser::Parse_Fopen(void)
 
         CASE(WRITE_TOKEN)
             New->R_Flag = false;
-            wfile = sceneData->CreateFile(GetPOVMSContext(), fileName.c_str(), POV_File_Text_User, false);
+            wfile = CreateFile(fileName.c_str(), POV_File_Text_User, false);
             if(wfile != NULL)
                 New->Out_File= new OTextStream(fileName.c_str(), wfile);
             else
@@ -3653,7 +3670,7 @@ void Parser::Parse_Fopen(void)
 
         CASE(APPEND_TOKEN)
             New->R_Flag = false;
-            wfile = sceneData->CreateFile(GetPOVMSContext(), fileName.c_str(), POV_File_Text_User, true);
+            wfile = CreateFile(fileName.c_str(), POV_File_Text_User, true);
             if(wfile != NULL)
                 New->Out_File= new OTextStream(fileName.c_str(), wfile);
             else
@@ -4147,8 +4164,7 @@ int Parser::Parse_For_Param (char** IdentifierPtr, DBL* EndPtr, DBL* StepPtr)
 
     EXPECT_ONE
         CASE (IDENTIFIER_TOKEN)
-            if (Token.is_array_elem)
-                Error("#for loop variable must not be an array element");
+            POV_PARSER_ASSERT(!Token.is_array_elem);
             Temp_Entry = Add_Symbol (Table_Index,Token.Token_String,IDENTIFIER_TOKEN);
             Token.NumberPtr = &(Temp_Entry->Token_Number);
             Token.DataPtr = &(Temp_Entry->Data);
@@ -4158,9 +4174,8 @@ int Parser::Parse_For_Param (char** IdentifierPtr, DBL* EndPtr, DBL* StepPtr)
         CASE2 (FUNCT_ID_TOKEN, VECTFUNCT_ID_TOKEN)
             if (Token.is_array_elem)
                 Error("#for loop variable must not be an array element");
-            if((!Token.is_array_elem) || (*(Token.DataPtr) != NULL))
-                Error("Redeclaring functions is not allowed - #undef the function first!");
-            // fall through
+            Error("Redeclaring functions is not allowed - #undef the function first!");
+        END_CASE
 
         // These have to match Parse_Declare in parse.cpp!
         CASE4 (TNORMAL_ID_TOKEN, FINISH_ID_TOKEN, TEXTURE_ID_TOKEN, OBJECT_ID_TOKEN)
@@ -4186,8 +4201,8 @@ int Parser::Parse_For_Param (char** IdentifierPtr, DBL* EndPtr, DBL* StepPtr)
         END_CASE
 
         CASE (EMPTY_ARRAY_TOKEN)
-            if (Token.is_array_elem)
-                Error("#for loop variable must not be an array element");
+            POV_PARSER_ASSERT(Token.is_array_elem);
+            Error("#for loop variable must not be an array element");
             Previous = Token.Token_Id;
         END_CASE
 
@@ -4203,8 +4218,12 @@ int Parser::Parse_For_Param (char** IdentifierPtr, DBL* EndPtr, DBL* StepPtr)
                         Temp_Entry = Add_Symbol (Table_Index,Token.Token_String,IDENTIFIER_TOKEN);
                         Token.NumberPtr = &(Temp_Entry->Token_Number);
                         Token.DataPtr   = &(Temp_Entry->Data);
+                        Previous        = IDENTIFIER_TOKEN;
                     }
-                    Previous           = Token.Function_Id;
+                    else
+                    {
+                        Previous        = Token.Function_Id;
+                    }
                     break;
 
                 default:
@@ -4282,7 +4301,7 @@ void Parser::IncludeHeader(const UCS2String& formalFileName)
 
     Input_File = &Include_Files[Include_File_Index];
     Input_File->In_File = NULL;
-    IStream *is = Locate_File (sceneData, formalFileName.c_str(),POV_File_Text_INC,actualFileName,true);
+    IStream *is = Locate_File (formalFileName.c_str(),POV_File_Text_INC,actualFileName,true);
     if(is == NULL)
     {
         Input_File->In_File = NULL;  /* Keeps from closing failed file. */

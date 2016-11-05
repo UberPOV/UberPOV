@@ -16,7 +16,7 @@
 /// ----------------------------------------------------------------------------
 ///
 /// Persistence of Vision Ray Tracer ('POV-Ray') version 3.7.
-/// Copyright 1991-2015 Persistence of Vision Raytracer Pty. Ltd.
+/// Copyright 1991-2016 Persistence of Vision Raytracer Pty. Ltd.
 ///
 /// POV-Ray is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU Affero General Public License as
@@ -53,6 +53,8 @@
 
 #include "base/fileutil.h"
 
+#include "vm/fnpovfpu.h"
+
 #include "povms/povmsid.h"
 
 // this must be the last file included
@@ -62,8 +64,7 @@ namespace pov
 {
 
 BackendSceneData::BackendSceneData() :
-    SceneData(),
-    gammaMode(kPOVList_GammaMode_None) // default setting for 3.62, which in turn is the default for the language
+    SceneData(new FunctionVM())
 {}
 
 UCS2String BackendSceneData::FindFile(POVMSContext ctx, const UCS2String& filename, unsigned int stype)
@@ -178,21 +179,21 @@ IStream *BackendSceneData::ReadFile(POVMSContext ctx, const UCS2String& origname
     if(fileurl.length() > 0)
     {
         // create a temporary file
-        UCS2String tempname = POV_PLATFORM_BASE.CreateTemporaryFile();
+        UCS2String tempname = PlatformBase::GetInstance().CreateTemporaryFile();
         OStream *tempfile = NewOStream(tempname.c_str(), stype, false);
 
         if(tempfile == NULL)
         {
-            POV_PLATFORM_BASE.DeleteTemporaryFile(tempname);
+            PlatformBase::GetInstance().DeleteTemporaryFile(tempname);
             throw POV_EXCEPTION_CODE(kCannotOpenFileErr);
         }
 
         // download the file from the URL
         // TODO - handle referrer
-        if(POV_PLATFORM_BASE.ReadFileFromURL(tempfile, fileurl) == false)
+        if(PlatformBase::GetInstance().ReadFileFromURL(tempfile, fileurl) == false)
         {
             delete tempfile;
-            POV_PLATFORM_BASE.DeleteTemporaryFile(tempname);
+            PlatformBase::GetInstance().DeleteTemporaryFile(tempname);
             throw POV_EXCEPTION_CODE(kNetworkConnectionErr);
         }
 
@@ -249,21 +250,21 @@ IStream *BackendSceneData::ReadFile(POVMSContext ctx, const UCS2String& filename
     if(fileurl.length() > 0)
     {
         // create a temporary file
-        UCS2String tempname = POV_PLATFORM_BASE.CreateTemporaryFile();
+        UCS2String tempname = PlatformBase::GetInstance().CreateTemporaryFile();
         OStream *tempfile = NewOStream(tempname.c_str(), stype, false);
 
         if(tempfile == NULL)
         {
-            POV_PLATFORM_BASE.DeleteTemporaryFile(tempname);
+            PlatformBase::GetInstance().DeleteTemporaryFile(tempname);
             throw POV_EXCEPTION_CODE(kCannotOpenFileErr);
         }
 
         // download the file from the URL
         // TODO - handle referrer
-        if(POV_PLATFORM_BASE.ReadFileFromURL(tempfile, fileurl) == false)
+        if(PlatformBase::GetInstance().ReadFileFromURL(tempfile, fileurl) == false)
         {
             delete tempfile;
-            POV_PLATFORM_BASE.DeleteTemporaryFile(tempname);
+            PlatformBase::GetInstance().DeleteTemporaryFile(tempname);
             throw POV_EXCEPTION_CODE(kNetworkConnectionErr);
         }
 
@@ -308,7 +309,7 @@ OStream *BackendSceneData::CreateFile(POVMSContext ctx, const UCS2String& filena
         return NewOStream(itempfile->second.c_str(), stype, append);
 
     // otherwise, create a temporary file ...
-    UCS2String tempname = POV_PLATFORM_BASE.CreateTemporaryFile();
+    UCS2String tempname = PlatformBase::GetInstance().CreateTemporaryFile();
     OStream *tempfile = NewOStream(tempname.c_str(), stype, append);
 
     // failed to open file

@@ -2,7 +2,7 @@
 ///
 /// @file vfe/win/vfeplatform.cpp
 ///
-/// This module contains platform-specific support code for the VFE.
+/// Platform-specific support code for the VFE.
 ///
 /// @author Christopher J. Cason
 ///
@@ -472,7 +472,7 @@ namespace vfePlatform
     string str = boost::trim_copy(src);
     string tmp = boost::to_lower_copy(str);
 
-    for (s = str.c_str(); *s; *s++)
+    for (s = str.c_str(); *s != '\0'; s++)
     {
       if (*s == '"')
         inDQ = !inDQ;

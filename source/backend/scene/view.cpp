@@ -1506,6 +1506,7 @@ const Camera *RTRData::CompletedFrame()
         }
     }
 
+    // TODO FIXME - boost::xtime has been deprecated since boost 1.34.
     boost::xtime t;
     boost::xtime_get (&t, POV_TIME_UTC);
     t.sec += 3;

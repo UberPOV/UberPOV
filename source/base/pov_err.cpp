@@ -45,6 +45,7 @@
 #include "base/pov_err.h"
 
 // C++ variants of standard C header files
+#include <cstdio>
 #include <cstring>
 
 #include "base/branch.h"

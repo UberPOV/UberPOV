@@ -59,16 +59,12 @@
 #include "core/shape/mesh.h"
 #include "core/support/statistics.h"
 
-#include "backend/support/task.h"
-
 namespace pov
 {
 
 using namespace pov_base;
 
 class SceneData;
-class FunctionVM;
-class FPUContext;
 struct ISO_ThreadData;
 
 class PhotonMap;
@@ -77,7 +73,7 @@ struct Blob_Interval_Struct;
 /**
  *  Class holding parser thread specific data.
  */
-class TraceThreadData : public Task::TaskData
+class TraceThreadData : public ThreadData
 {
         friend class Scene;
         friend class Trace;
@@ -110,7 +106,7 @@ class TraceThreadData : public Task::TaskData
         vector<BCYL_INT> BCyl_RInt;
         vector<BCYL_INT> BCyl_HInt;
         IStackPool stackPool;
-        vector<FPUContext*> fpuContextPool;
+        vector<GenericFunctionContext*> functionContextPool;
         int Facets_Last_Seed;
         int Facets_CVC;
         Vector3d Facets_Cube[81];
