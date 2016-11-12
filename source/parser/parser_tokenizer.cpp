@@ -3632,6 +3632,7 @@ void Parser::Parse_Fopen(void)
     New=reinterpret_cast<DATA_FILE *>(POV_MALLOC(sizeof(DATA_FILE),"user file"));
     New->In_File=NULL;
     New->Out_File=NULL;
+    New->fopenCompleted = false;
 
     GET(IDENTIFIER_TOKEN)
     Entry = Add_Symbol (SYM_TABLE_GLOBAL,Token.Token_String,FILE_ID_TOKEN);
@@ -3685,6 +3686,8 @@ void Parser::Parse_Fopen(void)
             Expectation_Error("read or write");
         END_CASE
     END_EXPECT
+
+    New->fopenCompleted = true;
 }
 
 void Parser::Parse_Fclose(void)
@@ -3694,6 +3697,8 @@ void Parser::Parse_Fclose(void)
     EXPECT
         CASE(FILE_ID_TOKEN)
             Data=reinterpret_cast<DATA_FILE *>(Token.Data);
+            if (!Data->fopenCompleted)
+                Error ("#fopen statement incomplete.");
             if(Data->In_File != NULL)
                 delete Data->In_File;
             if(Data->Out_File != NULL)
@@ -3724,6 +3729,8 @@ void Parser::Parse_Read()
     GET(FILE_ID_TOKEN)
     User_File=reinterpret_cast<DATA_FILE *>(Token.Data);
     File_Id=POV_STRDUP(Token.Token_String);
+    if (!User_File->fopenCompleted)
+        Error ("#fopen statement incomplete.");
     if(User_File->In_File == NULL)
         Error("Cannot read from file %s because the file is open for writing only.", UCS2toASCIIString(UCS2String(User_File->Out_File->name())).c_str());
 
@@ -3964,6 +3971,8 @@ void Parser::Parse_Write(void)
     GET(FILE_ID_TOKEN)
 
     User_File=reinterpret_cast<DATA_FILE *>(Token.Data);
+    if (!User_File->fopenCompleted)
+        Error ("#fopen statement incomplete.");
     if(User_File->Out_File == NULL)
         Error("Cannot write to file %s because the file is open for reading only.", UCS2toASCIIString(UCS2String(User_File->In_File->name())).c_str());
 

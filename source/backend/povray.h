@@ -115,7 +115,7 @@ bool povray_terminated();
 #else
 
 #ifndef BUILT_BY
-#error Please complete the BUILT_BY definition in source/base/build.h
+#error "Please complete the BUILT_BY definition in source/base/build.h"
 #endif
 
 #define DISTRIBUTION_MESSAGE_1 "This is an unofficial version compiled by:"

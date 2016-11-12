@@ -378,7 +378,7 @@ LightSource::LightSource() : CompoundObject(LIGHT_OBJECT)
 #elif defined(HAVE_INF)
     Max_Distance  = std::numeric_limits<DBL>::infinity();
 #else
-    #error Need support for NaNs or Infinities.
+    #error "Need support for NaNs or Infinities."
 #endif
 
     Projected_Through_Object= NULL;

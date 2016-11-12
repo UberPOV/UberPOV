@@ -285,7 +285,7 @@ IStream *BackendSceneData::ReadFile(POVMSContext ctx, const UCS2String& filename
 boost::posix_time::ptime BackendSceneData::GetFileTime(POVMSContext ctx, const UCS2String& origname, const UCS2String& filename, unsigned int stype)
 {
 #ifdef USE_SCENE_FILE_MAPPING
-    #error not implemented yet
+    #error "not implemented yet"
 #else
     struct stat s;
     string fn = UCS2toASCIIString(filename);

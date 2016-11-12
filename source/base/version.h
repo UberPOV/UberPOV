@@ -54,14 +54,14 @@
 #define OFFICIAL_VERSION_STRING "3.7.1"
 #define OFFICIAL_VERSION_NUMBER 371
 
-#define POV_RAY_PRERELEASE "x.colour.8858697"
+#define POV_RAY_PRERELEASE "x.colour.8871403"
 
 #define POV_RAY_EDITOR_VERSION "3.7.0"
 
 #ifdef BRANCH_NAME
 
     #if POV_RAY_IS_OFFICIAL == 1
-    #error A branch build cannot be an official POV-Ray build.
+    #error "A branch build cannot be an official POV-Ray build."
     #endif
 
     #ifdef POV_RAY_PRERELEASE
