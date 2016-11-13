@@ -62,6 +62,10 @@ class SceneData;
 class Task;
 class ViewData;
 
+#if PATCH_MEGAPOV_GLOW
+struct Glow;
+#endif
+
 struct NoSomethingFlagRayObjectCondition : public RayObjectCondition
 {
     virtual bool operator()(const Ray& ray, ConstObjectPtr object, double) const;
@@ -889,6 +893,11 @@ class Trace
     ///
     //*****************************************************************************
     ///
+
+#if PATCH_MEGAPOV_GLOW
+        void ComputeGlows (LightColour& colour, const Intersection& isect, const BasicRay& ray);
+        void ComputeGlow (LightColour& colour, const Intersection& isect, const BasicRay& ray, const Glow& glow);
+#endif
 
 };
 

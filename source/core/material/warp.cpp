@@ -10,6 +10,14 @@
 /// @copyright
 /// @parblock
 ///
+/// UberPOV Raytracer version 1.37.
+/// Portions Copyright 2013-2016 Christoph Lipka.
+///
+/// UberPOV 1.37 is an experimental unofficial branch of POV-Ray 3.7, and is
+/// subject to the same licensing terms and conditions.
+///
+/// ----------------------------------------------------------------------------
+///
 /// Persistence of Vision Ray Tracer ('POV-Ray') version 3.7.
 /// Copyright 1991-2016 Persistence of Vision Raytracer Pty. Ltd.
 ///
@@ -95,13 +103,16 @@ static RandomDoubleSequence WarpRands(0.0, 1.0, 32768);
 
 void Warp_EPoint (Vector3d& TPoint, const Vector3d& EPoint, const TPATTERN *TPat)
 {
-    WarpList& warps=TPat->pattern->warps;
+    Warp_EPoint (TPoint, EPoint, TPat->pattern->warps);
+}
 
+void Warp_EPoint (Vector3d& TPoint, const Vector3d& EPoint, const WarpList& warps)
+{
     TPoint = EPoint;
 
-    for (WarpList::reverse_iterator iWarp = warps.rbegin(); iWarp != warps.rend(); iWarp ++)
+    for (WarpList::const_reverse_iterator iWarp = warps.rbegin(); iWarp != warps.rend(); iWarp ++)
     {
-        WarpPtr& warp = *iWarp;
+        const WarpPtr& warp = *iWarp;
         warp->WarpPoint(TPoint);
     }
 

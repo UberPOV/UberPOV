@@ -48,6 +48,10 @@
 #include "core/render/ray.h"
 #include "core/scene/object.h"
 
+#if PATCH_MEGAPOV_GLOW
+#include "patches/glow.h"
+#endif
+
 // this must be the last file included
 #include "base/povdebug.h"
 
@@ -205,6 +209,10 @@ void LightSource::Translate(const Vector3d& Vector, const TRANSFORM *tr)
 
     if(Projected_Through_Object != NULL )
         Translate_Object(Projected_Through_Object, Vector, tr);
+
+#if PATCH_MEGAPOV_GLOW
+    TransformGlows (glows, tr);
+#endif
 }
 
 
@@ -324,6 +332,10 @@ void LightSource::Transform(const TRANSFORM *tr)
 
     if(Projected_Through_Object != NULL)
         Transform_Object(Projected_Through_Object, tr);
+
+#if PATCH_MEGAPOV_GLOW
+    TransformGlows (glows, tr);
+#endif
 }
 
 
@@ -441,6 +453,10 @@ ObjectPtr LightSource::Copy()
     if(!children.empty())
         New->children[0] = Copy_Object(children[0]);
     New->Projected_Through_Object = Copy_Object(Projected_Through_Object);
+
+#if PATCH_MEGAPOV_GLOW
+    CopyGlows (New->glows, glows);
+#endif
 
     return (New);
 }

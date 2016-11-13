@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Patches source">
+      <UniqueIdentifier>{C7F8D6E8-22E6-4415-9AD6-0996790E5376}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Patches Headers">
+      <UniqueIdentifier>{F06ABC90-2FE9-45F4-B839-FE1CBC9B8A5A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\patches\glow.cpp">
+      <Filter>Patches source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\patches\precomp.cpp">
+      <Filter>Patches source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\patches\configpatches.h">
+      <Filter>Patches Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\patches\glow.h">
+      <Filter>Patches Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\patches\precomp.h">
+      <Filter>Patches Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

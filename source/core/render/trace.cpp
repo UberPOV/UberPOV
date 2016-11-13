@@ -210,6 +210,10 @@ double Trace::TraceRay(Ray& ray, LightColour& colour, ColourChannel& transm, COL
 
         if(sceneData->fog != NULL)
             ComputeFog(colour, transm, ray, bestisect);
+
+#if PATCH_MEGAPOV_GLOW
+        ComputeGlows (colour, bestisect, ray);
+#endif
     }
 
     if(traceLevelIncremented)

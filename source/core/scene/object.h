@@ -62,6 +62,10 @@ namespace pov_base
 namespace pov
 {
 
+#if PATCH_MEGAPOV_GLOW
+struct Glow;
+#endif
+
 /*****************************************************************************
 * Global preprocessor defines
 ******************************************************************************/
@@ -323,6 +327,10 @@ class LightSource : public CompoundObject
         bool Media_Attenuation : 1;
         bool Media_Interaction : 1;
         bool lightGroupLight : 1;
+
+#if PATCH_MEGAPOV_GLOW
+        vector<Glow*> glows;
+#endif
 
         LightSource();
         virtual ~LightSource();

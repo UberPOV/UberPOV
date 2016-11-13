@@ -3649,6 +3649,12 @@ ObjectPtr Parser::Parse_Light_Source ()
             Transform_Object (reinterpret_cast<ObjectPtr>(Object), &Local_Trans);
         END_CASE
 
+#if PATCH_MEGAPOV_GLOW
+        CASE (GLOW_TOKEN)
+            Parse_Glow (Object);
+        END_CASE
+#endif
+
         OTHERWISE
             UNGET
             EXIT
@@ -7109,6 +7115,12 @@ void Parser::Parse_Frame ()
             CASE (GLOBAL_SETTINGS_TOKEN)
                 Parse_Global_Settings();
             END_CASE
+
+#if PATCH_MEGAPOV_GLOW
+            CASE (GLOW_TOKEN)
+                Parse_Glow();
+            END_CASE
+#endif
 
             OTHERWISE
                 UNGET

@@ -7,6 +7,14 @@
 /// @copyright
 /// @parblock
 ///
+/// UberPOV Raytracer version 1.37.
+/// Portions Copyright 2013-2016 Christoph Lipka.
+///
+/// UberPOV 1.37 is an experimental unofficial branch of POV-Ray 3.7, and is
+/// subject to the same licensing terms and conditions.
+///
+/// ----------------------------------------------------------------------------
+///
 /// Persistence of Vision Ray Tracer ('POV-Ray') version 3.7.
 /// Copyright 1991-2016 Persistence of Vision Raytracer Pty. Ltd.
 ///
@@ -55,6 +63,10 @@ class BSPTree;
 struct Fog_Struct;
 struct Rainbow_Struct;
 struct Skysphere_Struct;
+
+#if PATCH_MEGAPOV_GLOW
+struct Glow;
+#endif
 
 /**
  *  SceneData class representing holding scene specific data.
@@ -225,6 +237,10 @@ class SceneData
         // BSP statistics // TODO - not sure if this is the best place for stats
         unsigned int nodes, splitNodes, objectNodes, emptyNodes, maxObjects, maxDepth, aborts;
         float averageObjects, averageDepth, averageAborts, averageAbortObjects;
+
+#if PATCH_MEGAPOV_GLOW
+        vector<Glow*> glows;
+#endif
 
         // ********************************************************************************
         // ********************************************************************************

@@ -51,7 +51,7 @@
 #define BRANCH_CONTACT          "http://www.lipka-koeln.de"
 #define BRANCH_VERSION          "1.37.1.1"
 #define BRANCH_COPYRIGHT        "Copyright 2013-2016 Christoph Lipka."
-#define BRANCH_PRERELEASE       "alpha.8871674"
+#define BRANCH_PRERELEASE       "alpha.8871946"
 
 /// Primary developers of this branch, in alphabetical order.
 /// Comma-separated list of strings, e.g.
@@ -67,7 +67,7 @@
 ///
 /// Leave undefined if there are no additional contributors.
 ///
-#define BRANCH_CONTRIBUTORS     "Christian Froeschlin"
+#define BRANCH_CONTRIBUTORS     "Christian Froeschlin", "Chris Huff"
 
 
 #if STANDALONE_BUILD == 1

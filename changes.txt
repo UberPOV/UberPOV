@@ -76,10 +76,19 @@ Testing for UberPOV:
         The "file_time" keyword can be used as a function to determine the
         last modification time of a file.
 
+      - upov-light_source-max_distance (0.80):
+
+        The "max_distance" keyword can be used inside light_source statements
+        to affect the light source distance-based cutoff feature.
+
       - upov-lommel_seeliger (0.90):
 
         The "lommel_seeliger" keyword can be used inside finish statements to
         enable the Lommel-Seeliger diffuse shading model.
+
+      - upov-megapov-glow (1.21):
+
+        The "glow" keyword can be used as in MegaPOV 1.2.1.
 
       - upov-minnaert (0.90):
 
@@ -90,11 +99,6 @@ Testing for UberPOV:
 
         The "oren_nayar" keyword can be used inside finish statements to enable
         the Oren-Nayar diffuse shading model.
-
-      - upov-light_source-max_distance (0.80):
-
-        The "max_distance" keyword can be used inside light_source statements
-        to affect the light source distanc-based cutoff feature.
 
       - upov-persistent (0.10):
 
@@ -130,8 +134,8 @@ Plaintext Reading:
     patch() function with the patch name "upov-read-text"; the current
     implementation is version 1.0.
 
-File Modification Time
-----------------------
+File Modification Time:
+-----------------------
 
   - UberPOV provides a function to determine when a particular file was last
     modified:
@@ -148,8 +152,8 @@ File Modification Time
     patch() function with the patch name "upov-file_time"; the current
     implementation is version 0.9.
 
-Light Source Distance-Based Cutoff
-----------------------------------
+Light Source Distance-Based Cutoff:
+-----------------------------------
 
   - Light sources with distance-based fading (i.e. using the fade_distance
     keyword) are cut off entirely at a certain distance to improve performance.
@@ -412,6 +416,17 @@ Adaptive Multi-Level Oversampling:
     the sequence reproducible, or to the contrary cause different sequences to
     be used even in renders started at the same time. If set to 0 (the
     default), the seed value is determined from the current time and date.
+
+Partial MegaPOV Compatibility:
+------------------------------
+
+  - UberPOV re-implements some features originally known from the MegaPOV patch
+    collection. Support for those features can be tested for using the #patch
+    directive or patch() function with patch names of the form "upov-megapov-*"
+    as listed below, with the patch version reflecting the MegaPOV version after
+    which the UberPOV implementation is modelled:
+
+      - Glow Effect ("upov-megapov-glow", 1.21)
 
 Windows Related:
 ----------------

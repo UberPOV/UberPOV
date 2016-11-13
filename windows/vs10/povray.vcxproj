@@ -594,6 +594,9 @@
     <ProjectReference Include="povparser.vcxproj">
       <Project>{f0304a28-e1c7-4f4f-be1f-df57936c9664}</Project>
     </ProjectReference>
+    <ProjectReference Include="povpatches.vcxproj">
+      <Project>{7784ef80-7437-4046-ab9d-cb97510320af}</Project>
+    </ProjectReference>
     <ProjectReference Include="povplatform.vcxproj">
       <Project>{0c227b07-1830-4c5b-8d4e-2defffd2792d}</Project>
     </ProjectReference>

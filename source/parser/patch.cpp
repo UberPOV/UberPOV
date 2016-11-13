@@ -64,6 +64,9 @@ static const Patch_Data patch_data[] = {
     { "upov-file_time",                 0.90 }, // UberPOV-style file_time function
     { "upov-light_source-max_distance", 0.80 }, // UberPOV-style distance-based cutoff of light sources
     { "upov-lommel_seeliger",           0.90 }, // UberPOV-style support for Lommel-Seeliger diffuse shading model
+#if PATCH_MEGAPOV_GLOW
+    { "upov-megapov-glow",              1.21 }, // MegaPOV-style `glow` effect
+#endif
     { "upov-minnaert",                  0.90 }, // UberPOV-style support for Minnaert diffuse shading model
     { "upov-oren_nayar",                0.10 }, // UberPOV-style support for Oren-Nayar diffuse shading model
 #if EXPERIMENTAL_UPOV_PERSISTENT

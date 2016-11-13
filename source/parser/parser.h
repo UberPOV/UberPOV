@@ -125,6 +125,10 @@ struct BlackHoleWarp; // full declaration in core/material/warp.h
 class Mesh;
 class SceneData;
 
+#if PATCH_MEGAPOV_GLOW
+struct Glow;
+#endif
+
 /*****************************************************************************
 * Global preprocessor defines
 ******************************************************************************/
@@ -845,6 +849,13 @@ class Parser : public SceneTask
         // TODO - obsolete
         RGBFTColour *Create_Colour (void);
         RGBFTColour *Copy_Colour (const RGBFTColour* Old);
+
+#if PATCH_MEGAPOV_GLOW
+        void Parse_Glow ();
+        void Parse_Glow (LightSource*);
+        void Parse_Glow (Glow*);
+#endif
+
 };
 
 }
