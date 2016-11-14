@@ -223,6 +223,17 @@ const char *BranchContributors[] =
 
 #endif
 
+#ifdef BRANCH_SPONSORS
+
+/// branch financial sponsors
+const char *BranchSponsors[] =
+{
+    BRANCH_SPONSORS,
+    NULL
+};
+
+#endif
+
 /// POVMS context to receive messages from the frontend
 volatile POVMSContext POV_RenderContext = NULL;
 
@@ -431,6 +442,28 @@ void BuildInitInfo(POVMSObjectPtr msg)
     }
     if(err == kNoErr)
         err = POVMSObject_Set(msg, &attrlist, kPOVAttrib_BranchContributingDevs);
+#endif
+
+#ifdef BRANCH_SPONSORS
+    if(err == kNoErr)
+        err = POVMSAttrList_New(&attrlist);
+    if(err == kNoErr)
+    {
+        for(int i = 0; BranchSponsors[i] != NULL; i++)
+        {
+            err = POVMSAttr_New(&attr);
+            if(err == kNoErr)
+            {
+                err = POVMSAttr_Set(&attr, kPOVMSType_CString, BranchSponsors[i], (int) strlen(BranchSponsors[i]) + 1);
+                if(err == kNoErr)
+                    err = POVMSAttrList_Append(&attrlist, &attr);
+                else
+                    err = POVMSAttr_Delete(&attr);
+            }
+        }
+    }
+    if(err == kNoErr)
+        err = POVMSObject_Set(msg, &attrlist, kPOVAttrib_BranchSponsors);
 #endif
 
     if(err == kNoErr)

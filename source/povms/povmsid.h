@@ -291,6 +291,7 @@ enum
     kPOVAttrib_ContributingDevs      = 'Cont',
     kPOVAttrib_BranchPrimaryDevs     = 'BPri',
     kPOVAttrib_BranchContributingDevs = 'BCon',
+    kPOVAttrib_BranchSponsors        = 'BSpo',
     kPOVAttrib_ImageLibVersions      = 'ILVe',
 
     // options handled by frontend
