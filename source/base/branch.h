@@ -51,8 +51,9 @@
 #define BRANCH_CONTACT          "http://www.lipka-koeln.de"
 #define BRANCH_VERSION          "1.37.1.1"
 #define BRANCH_COPYRIGHT        "Copyright 2013-2016 Christoph Lipka."
-#define BRANCH_PRERELEASE       "alpha.8871946"
+#define BRANCH_PRERELEASE       "alpha.8883377"
 
+/// @def BRANCH_DEVELOPERS
 /// Primary developers of this branch, in alphabetical order.
 /// Comma-separated list of strings, e.g.
 ///
@@ -60,6 +61,7 @@
 ///
 #define BRANCH_DEVELOPERS       "Christoph Lipka"
 
+/// @def BRANCH_CONTRIBUTORS
 /// Additional contributors to this branch, in alphabetical order.
 /// Comma-separated list of strings, e.g.
 ///
@@ -68,6 +70,16 @@
 /// Leave undefined if there are no additional contributors.
 ///
 #define BRANCH_CONTRIBUTORS     "Christian Froeschlin", "Chris Huff"
+
+/// @def BRANCH_SPONSORS
+/// Financial sponsors of this branch, in alphabetical order.
+/// Comma-separated list of strings, e.g.
+///
+///     #define BRANCH_SPONSORS "John Doe", "Frank N. Furter", "R. Daneel Olivaw"
+///
+/// Leave undefined if there are no financial sponsors.
+///
+//#define BRANCH_SPONSORS
 
 
 #if STANDALONE_BUILD == 1

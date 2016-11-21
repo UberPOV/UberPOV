@@ -830,6 +830,35 @@ void InitInfo(POVMS_Object& cppmsg, TextStreamBuffer *tsb)
         (void)POVMSAttrList_Delete(&attrlist);
     }
 
+    if(POVMSObject_Get(msg, &attrlist, kPOVAttrib_BranchSponsors) == kNoErr)
+    {
+        tsb->printf("\n");
+        tsb->printf("UberPOV Financial Sponsors: (Alphabetically)\n");
+        cnt = 0;
+
+        if(POVMSAttrList_Count(&attrlist, &cnt) == kNoErr)
+        {
+            for(i = 0, h = 1; h <= cnt; i++)
+            {
+                for(j = 0; (j < NUMBER_OF_AUTHORS_ACROSS) && (h <= cnt); j++, h++)
+                {
+                    if(POVMSAttrList_GetNth(&attrlist, h, &item) == kNoErr)
+                    {
+                        l = 1023;
+                        charbuf[0] = 0;
+                        if(POVMSAttr_Get(&item, kPOVMSType_CString, charbuf, &l) == kNoErr)
+                            tsb->printf("  %-18s", charbuf);
+
+                        (void)POVMSAttr_Delete(&item);
+                    }
+                }
+                tsb->printf("\n");
+            }
+        }
+
+        (void)POVMSAttrList_Delete(&attrlist);
+    }
+
     tsb->printf("\n");
     tsb->printf("Primary POV-Ray Architects/Developers: (Alphabetically)\n");
     if(POVMSObject_Get(msg, &attrlist, kPOVAttrib_PrimaryDevs) == kNoErr)

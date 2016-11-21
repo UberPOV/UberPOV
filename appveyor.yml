@@ -52,12 +52,12 @@ build:
 
 after_build:
 - ps: |
-    $version_h = 'source/base/version.h'
-    $regexp = '^\s*#define\s+OFFICIAL_VERSION_STRING\s*"[^"]+"\s*$'
+    $version_h = 'source/base/branch.h'
+    $regexp = '^\s*#define\s+BRANCH_VERSION\s*"[^"]+"\s*$'
     $line = ( select-string -Path $version_h -Pattern $regexp | % { $_.Matches } | % { $_.Value } )
     $string = ( select-string -InputObject $line -Pattern '"[^"]+"' | % { $_.Matches } | % { $_.Value } )
     $official_version = ( select-string -InputObject $string -Pattern '[^"]+' | % { $_.Matches } | % { $_.Value } )
-    $regexp = '^\s*#define\s+POV_RAY_PRERELEASE\s*"[^"]+"\s*$'
+    $regexp = '^\s*#define\s+BRANCH_PRERELEASE\s*"[^"]+"\s*$'
     $line = ( select-string -Path $version_h -Pattern $regexp | % { $_.Matches } | % { $_.Value } )
     $string = ( select-string -InputObject $line -Pattern '"[^"]+"' | % { $_.Matches } | % { $_.Value } )
     $prerelease = ( select-string -InputObject $string -Pattern '[^"]+' | % { $_.Matches } | % { $_.Value } )
