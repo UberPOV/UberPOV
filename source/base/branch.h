@@ -51,7 +51,7 @@
 #define BRANCH_CONTACT          "http://www.lipka-koeln.de"
 #define BRANCH_VERSION          "1.37.1.1"
 #define BRANCH_COPYRIGHT        "Copyright 2013-2016 Christoph Lipka."
-#define BRANCH_PRERELEASE       "alpha.8883367"
+#define BRANCH_PRERELEASE       "alpha.8883522"
 
 /// @def BRANCH_DEVELOPERS
 /// Primary developers of this branch, in alphabetical order.

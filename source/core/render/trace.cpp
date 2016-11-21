@@ -2119,9 +2119,9 @@ void Trace::TraceAreaLightShadowRay(LightColour& colour, const LightSource &ligh
         for (unsigned int i = 0; i < sampleCount; ++i)
         {
             if (lightsource.Circular)
-                uv = Uniform2dOnDisc(stochasticRandomGenerator);
+                uv = Uniform2dOnDisc(stochasticRandomGenerator) * 0.5;
             else
-                uv = Uniform2dOnSquare(stochasticRandomGenerator);
+                uv = Uniform2dOnSquare(stochasticRandomGenerator) - 0.5;
 
             Ray lsr(lightsourceray);
 
